@@ -15,7 +15,6 @@
     "targeted-surveys",
     "sdk"
   ],
-  "nativePackage": true,
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
