@@ -1,6 +1,7 @@
 {
   "name": "usabilla-react-native",
-  "version": "0.0.0-development",
+  "version": "6.4.1",
+  "homepage": "usabilla.com",
   "description": "Usabilla SDK for React Native",
   "repository": {
     "type": "git",
