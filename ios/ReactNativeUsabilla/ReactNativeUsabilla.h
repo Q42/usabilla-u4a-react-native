@@ -6,12 +6,11 @@
 //  Copyright © 2018 Usabilla. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 #import <React/RCTConvert.h>
-#import "ReactNativeUsabilla-Swift.h"
+//#import "ReactNativeUsabilla-Swift.h"
+#import "Kramp-Swift.h"
 
 @interface ReactNativeUsabilla : RCTEventEmitter <RCTBridgeModule, UsabillaInterfaceDelegate>
 
