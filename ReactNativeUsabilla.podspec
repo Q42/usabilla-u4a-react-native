@@ -20,4 +20,5 @@ Pod::Spec.new do |s|
   s.dependency 'React'
   s.dependency 'Usabilla'
   s.frameworks = 'UIKit'
+  s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => 'ios/ReactNativeUsabilla/ReactNativeUsabilla-Bridging-Header.h' }
 end
