@@ -1,124 +1,105 @@
+import { NativeEventEmitter, NativeModules, Platform, DeviceEventEmitter } from 'react-native';
+const rnUsabilla = NativeModules.UsabillaBridge;
+const usabillaEventEmitter = (Platform.OS == 'android') ? DeviceEventEmitter : new NativeEventEmitter(rnUsabilla);
 
-import { NativeEventEmitter, NativeModules, Platform, DeviceEventEmitter } from 'react-native'
-let {UsabillaBridge} = NativeModules
-const usabillaEventEmitter = (Platform.OS == 'android') ? DeviceEventEmitter : new NativeEventEmitter(UsabillaBridge)
-
-/* Usabilla SDK Functions */
-function initialize(appId) {
-    if (Platform.OS == 'android') {
-        usabillaEventEmitter.addListener(
-            'UBFormNotFoundFragmentActivity',
-            () => console.log("The Activity does not extend FragmentActivity and cannot call getSupportFragmentManager()")
-        )
-    }
-    UsabillaBridge.initialize(appId)
-}
-
-function areNavigationButtonsVisible() {
-    if (Platform.OS == 'android') {
-        return UsabillaBridge.areNavigationButtonsVisible()
-    } else {
-        console.warn('areNavigationButtonsVisible is not available for iOS');
-        return true
-    }
-}
-
-function setDefaultNavigationButtonsVisibility(visible) {
-    if (Platform.OS == 'android') {
-        UsabillaBridge.setDefaultNavigationButtonsVisibility(visible)
-    } else {
-        console.warn('setDefaultNavigationButtonsVisibility is not available for iOS');
-    }
-}
-
-/**
- * This method will load the feedback with no screenshot attachement
- * @param {String} formId : feedback form Id
- */
-function loadFeedbackForm(formId) {
-    UsabillaBridge.loadFeedbackForm(formId)
-}
-
-/**
- * This method will load the feedback form and attach 
- * the current view screenshot to it.
- * @param {String} formId : feedback form Id
- */
-function loadFeedbackFormWithCurrentViewScreenshot(formId) {
-    UsabillaBridge.loadFeedbackFormWithCurrentViewScreenshot(formId)
-}
-
-function sendEvent(event) {
-    UsabillaBridge.sendEvent(event)
-}
-
-function removeCachedForms() {
-    UsabillaBridge.removeCachedForms()
-}
-
-function resetCampaignData(callback) {
-    if (Platform.OS == 'android') {
-        UsabillaBridge.resetCampaignData()
-    } else {
-        if (callback) {
-            UsabillaBridge.resetCampaignData(callback)
-            return
+export default {
+    
+    initialize(appId) {
+        if (Platform.OS == 'android') {
+            usabillaEventEmitter.addListener(
+                'UBFormNotFoundFragmentActivity',
+                () => console.log("The Activity does not extend FragmentActivity and cannot call getSupportFragmentManager()")
+            )
         }
-        UsabillaBridge.resetCampaignData(()=> {
-            console.log("Campaign data is successfully reset!")
-        })
-    }
-}
-
-function showLoadedForm() {
-    UsabillaBridge.showLoadedFrom()
-}
-
-function setCustomVariables(customVariables) {
-    UsabillaBridge.setCustomVariables(customVariables)
-}
-
-function setFormDidLoadSuccessfully(callback) {
-    usabillaEventEmitter.addListener('UBFormLoadingSucceeded', callback)
-}
-
-function setFormDidFailLoading(callback) {
-    usabillaEventEmitter.addListener('UBFormLoadingFailed', callback)
-}
-
-function setFormDidClose(callback) {
-    if (Platform.OS == 'ios') {
+        return rnUsabilla.initialize(appId)
+    },
+    
+    areNavigationButtonsVisible() {
+        if (Platform.OS == 'android') {
+            return rnUsabilla.areNavigationButtonsVisible()
+        } else {
+            console.warn('areNavigationButtonsVisible is not available for iOS');
+            return true
+        }
+    },
+    
+    setDefaultNavigationButtonsVisibility(visible) {
+        if (Platform.OS == 'android') {
+            return rnUsabilla.setDefaultNavigationButtonsVisibility(visible)
+        } else {
+            console.warn('setDefaultNavigationButtonsVisibility is not available for iOS');
+        }
+    },
+    
+    /**
+     * This method will load the feedback with no screenshot attachement
+     * @param {String} formId : feedback form Id
+     */
+    loadFeedbackForm(formId) {
+        return rnUsabilla.loadFeedbackForm(formId)
+    },
+    
+    /**
+     * This method will load the feedback form and attach 
+     * the current view screenshot to it.
+     * @param {String} formId : feedback form Id
+     */
+    loadFeedbackFormWithCurrentViewScreenshot(formId) {
+        return rnUsabilla.loadFeedbackFormWithCurrentViewScreenshot(formId)
+    },
+    
+    sendEvent(event) {
+        return rnUsabilla.sendEvent(event)
+    },
+    
+    removeCachedForms() {
+        return rnUsabilla.removeCachedForms()
+    },
+    
+    resetCampaignData(callback) {
+        if (Platform.OS == 'android') {
+            return rnUsabilla.resetCampaignData()
+        } else {
+            if (callback) {
+            return rnUsabilla.resetCampaignData(callback)
+                
+            }
+            return rnUsabilla.resetCampaignData(()=> {
+                console.log("Campaign data is successfully reset!")
+            })
+        }
+    },
+    
+    setCustomVariables(customVariables) {
+        return rnUsabilla.setCustomVariables(customVariables)
+    },
+    
+    setFormDidLoadSuccessfully(callback) {
+        return usabillaEventEmitter.addListener('UBFormLoadingSucceeded', callback)
+    },
+    
+    setFormDidFailLoading(callback) {
+        usabillaEventEmitter.addListener('UBFormLoadingFailed', callback)
+    },
+    
+    setFormDidClose(callback) {
         usabillaEventEmitter.addListener('UBFormDidClose', callback)
+    },
+    
+    setCampaignDidClose(callback) {
+        usabillaEventEmitter.addListener('UBCampaignDidClose', callback)
+    },
+    
+    dismiss() {
+        rnUsabilla.dismiss()
+    },
+    
+    setDataMasking(masks, character) {
+        rnUsabilla.setDataMasking(masks, character)
+    },
+    
+    getDefaultDataMasks() {
+        return rnUsabilla.DEFAULT_DATA_MASKS
     }
-}
 
-function dismiss() {
-    UsabillaBridge.dismiss()
-}
-
-function setDataMasking(masks, character) {
-    UsabillaBridge.setDataMasking(masks, character)
-}
-
-function getDefaultDataMasks() {
-    return UsabillaBridge.DEFAULT_DATA_MASKS
-}
-
-module.exports = {
-    areNavigationButtonsVisible,
-    dismiss,
-    initialize,
-    loadFeedbackForm,
-    loadFeedbackFormWithCurrentViewScreenshot,
-    removeCachedForms,
-    resetCampaignData,
-    sendEvent,
-    setCustomVariables,
-    setDataMasking,
-    getDefaultDataMasks,
-    setDefaultNavigationButtonsVisibility,
-    setFormDidClose,
-    setFormDidFailLoading,
-    setFormDidLoadSuccessfully,
-    showLoadedForm
-}
+  };
