@@ -67,10 +67,8 @@ public class UsabillaBridge extends ReactContextBaseJavaModule implements Usabil
             final Activity activity = getCurrentActivity();
             if (activity instanceof FragmentActivity) {
                 FragmentManager supportFragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
-                Fragment fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG);
-
-                if (fragment != null) {
-                    supportFragmentManager.beginTransaction().remove(fragment).commit();
+                if (supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) != null) {
+                    supportFragmentManager.popBackStack(FRAGMENT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
                 emitReactEvent(getReactApplicationContext(), "UBFormDidClose", result);
                 return;
@@ -254,7 +252,7 @@ public class UsabillaBridge extends ReactContextBaseJavaModule implements Usabil
         form = formClient.getFragment();
         final Activity activity = getCurrentActivity();
         if (activity instanceof FragmentActivity && form != null) {
-            ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction().replace(android.R.id.content, form, FRAGMENT_TAG).commit();
+            ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction().replace(android.R.id.content, form, FRAGMENT_TAG).addToBackStack(FRAGMENT_TAG).commit();
             form = null;
             final WritableMap result = Arguments.createMap();
             result.putBoolean(KEY_SUCCESS_FLAG, true);
